@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Police Tracking System | Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="app-container">
+        <!-- Sidebar -->
+        <aside>
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+                    <path d="M12 2L4.5 20.29L5.21 21L12 18L18.79 21L19.5 20.29L12 2Z"></path>
+                </svg>
+            </div>
+
+            <div class="nav-item active" onclick="showSection('dashboard')" title="Dashboard">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+            </div>
+
+            <div class="nav-item" onclick="showSection('permits')" title="Beschlüsse">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+            </div>
+
+            <div class="nav-item" id="admin-tab" style="display: none;" onclick="showSection('admin')"
+                title="Admin Panel">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-avatar">
+                    <svg viewBox="0 0 24 24" fill="currentColor" style="padding: 4px;">
+                        <path
+                            d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Body -->
+        <div class="main-wrapper">
+            <header>
+                <div class="header-left">
+                    <h1 id="section-title">Dashboard</h1>
+                    <div class="header-badge">LIVE</div>
+                </div>
+                <div class="header-right">
+                    <div class="search-bar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="phone-search" placeholder="Suche nach Nummer oder Name...">
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <!-- Dashboard Section -->
+                <div id="dashboard-section">
+                    <div class="summary-bar">
+                        <div class="summary-item">
+                            <div class="label">Aktive Ortungen</div>
+                            <div class="value" id="active-tracks">0</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="label">Offene Anträge</div>
+                            <div class="value" id="pending-permits">0</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="label">System Status</div>
+                            <div class="value" style="color: var(--green);">OPERATIONAL</div>
+                        </div>
+                    </div>
+
+                    <div class="color-line">
+                        <div class="line-btc"></div>
+                        <div class="line-eth"></div>
+                        <div class="line-bnb"></div>
+                        <div class="line-xrp"></div>
+                    </div>
+
+                    <div class="targets-grid" id="active-targets-grid">
+                        <!-- Targets as "Coin Cards" -->
+                    </div>
+
+                    <div class="bottom-grid">
+                        <div class="card-panel">
+                            <div class="panel-header">
+                                <div class="panel-title">Letzte Aktivitäten</div>
+                            </div>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Target</th>
+                                        <th>Typ</th>
+                                        <th>Zeit</th>
+                                        <th style="text-align: right;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="activity-logs">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="card-panel action-panel">
+                            <div class="panel-title">Schnell-Zugriff</div>
+                            <div class="input-container">
+                                <div class="input-label">
+                                    <span>Ziel-Nummer</span>
+                                    <span>Verfügbar</span>
+                                </div>
+                                <div class="input-row">
+                                    <input type="text" id="quick-number" placeholder="000-0000">
+                                    <span style="font-size: 14px; font-weight: 600;">#</span>
+                                </div>
+                            </div>
+                            <button class="btn-binance" onclick="submitQuickRequest()">Antrag stellen</button>
+                            <p class="input-hint">
+                                Ein Antrag erfordert einen triftigen Grund und wird von der Führungsebene geprüft.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Permits Section -->
+                <div id="permits-section" style="display: none;">
+                    <div class="card-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">Alle Beschlüsse</div>
+                            <button class="btn-binance" style="width: auto; padding: 8px 16px;"
+                                onclick="openRequestModal()">Neuer Antrag</button>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nummer</th>
+                                    <th>Antragsteller</th>
+                                    <th>Gültig bis</th>
+                                    <th>Status</th>
+                                    <th style="text-align: right;">Aktion</th>
+                                </tr>
+                            </thead>
+                            <tbody id="permits-list">
+                                <!-- Dynamic -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Admin Section -->
+                <div id="admin-section" style="display: none;">
+                    <div class="card-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">Ausstehende Genehmigungen (Rang 8+)</div>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Antragsteller</th>
+                                    <th>Nummer</th>
+                                    <th>Grund</th>
+                                    <th style="text-align: right;">Entscheidung</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-permits">
+                                <!-- Dynamic -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Mockup -->
+    <div id="request-modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content:center; align-items:center;">
+        <div class="card-panel" style="width: 450px;">
+            <h2 style="margin-bottom: 24px;">Tracking beantragen</h2>
+            <div class="action-panel">
+                <div class="input-container">
+                    <div class="input-label">Nummer</div>
+                    <input type="text" id="req-number" placeholder="000-0000"
+                        style="background:transparent; border:none; color:white; font-size:18px; width:100%; outline:none;">
+                </div>
+                <div class="input-container">
+                    <div class="input-label">Grund</div>
+                    <textarea id="req-reason" placeholder="Grund für die Ortung..."
+                        style="background:transparent; border:none; color:white; font-size:14px; width:100%; height:100px; outline:none; resize:none;"></textarea>
+                </div>
+                <div style="display: flex; gap: 12px; margin-top: 12px;">
+                    <button class="btn-binance btn-secondary" onclick="closeRequestModal()">Abbrechen</button>
+                    <button class="btn-binance" onclick="submitRequest()">Einreichen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
